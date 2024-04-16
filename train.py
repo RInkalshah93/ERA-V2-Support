@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 #import model
-from model import Model_10
+from model_10 import Model_10
 import matplotlib.pyplot as plt
 import dataset
 from tqdm import tqdm
