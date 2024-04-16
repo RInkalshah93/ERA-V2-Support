@@ -4,8 +4,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 #import model
-!git clone https://github.com/RInkalshah93/ERA-V2-Support.git
-from model_10 import Model_10
 import matplotlib.pyplot as plt
 import dataset
 from tqdm import tqdm
