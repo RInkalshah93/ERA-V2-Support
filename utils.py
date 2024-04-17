@@ -69,7 +69,7 @@ def plot_prediction_image(test_loader,device,model):
                 misclassified_images.append(img.cpu())
                 misclassified_labels.append(classes[batch_label[i].item()])
                 misclassified_predictions.append(classes[prediction_class[i]])
-
+    print(misclassified_images.shape)
     fig = plt.figure(figsize=(14,7))
     for i in range(10):
         plt.subplot(2, 5, i + 1)
