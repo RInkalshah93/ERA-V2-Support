@@ -70,10 +70,10 @@ def plot_prediction_image(test_loader,device,model):
                 misclassified_labels.append(classes[batch_label[i].item()])
                 misclassified_predictions.append(classes[prediction_class[i]])
     print(misclassified_images.shape)
-    fig = plt.figure(figsize=(14,7))
+    fig = plt.figure(figsize=(20,8))
     for i in range(10):
         plt.subplot(2, 5, i + 1)
-        plt.tight_layout()
+        #plt.tight_layout()
         img = misclassified_images[i].permute(1,2,0)
         class_name = misclassified_predictions[i]
         plt.imshow(img.cpu())
