@@ -74,7 +74,7 @@ for epoch in range(EPOCHS):
     test_acc, test_losses = train.test(model, device, test_loader, criterion)
     print("LR for current epoch: ",scheduler.get_last_lr())
 
-    train.plot_loss_accuracy(train_losses,train_acc,test_losses,test_acc)
+train.plot_loss_accuracy(train_losses,train_acc,test_losses,test_acc)
 
 
 misclassified_images,misclassified_labels,misclassified_predictions,prediction = utils.plot_prediction_image(test_loader,device,model)
