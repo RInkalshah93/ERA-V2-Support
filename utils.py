@@ -6,6 +6,9 @@ from torchsummary import summary
 import torch.optim as optim
 from torch_lr_finder import LRFinder
 import torch.nn as nn
+from pytorch_grad_cam import GradCAM, HiResCAM, ScoreCAM, GradCAMPlusPlus, AblationCAM, XGradCAM, EigenCAM, FullGrad
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+from pytorch_grad_cam.utils.image import show_cam_on_image
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -69,7 +72,7 @@ def plot_prediction_image(test_loader,device,model):
                 misclassified_images.append(img.cpu())
                 misclassified_labels.append(classes[batch_label[i].item()])
                 misclassified_predictions.append(classes[prediction_class[i]])
-                
+
     fig = plt.figure(figsize=(20,8))
     for i in range(10):
         plt.subplot(2, 5, i + 1)
@@ -80,8 +83,61 @@ def plot_prediction_image(test_loader,device,model):
         plt.title(f'Actual: {misclassified_labels[i]} Predection: {class_name}')
         plt.xticks([])
         plt.yticks([])
+    return misclassified_images,misclassified_labels,misclassified_predictions,prediction
 
-    
+def plot_grad_cam(misclassified_images,misclassified_labels,misclassified_predictions,prediction,model):
+    target_layers = [model.layer3[-1]]
+    input_tensor = torch.stack(misclassified_images)
+
+    # Create an input tensor image for your model.
+    # Note: input_tensor can be a batch tensor with several images!
+    #print(input_tensor.shape)
+    # Construct the CAM object once, and then re-use it on many images:
+    cam = GradCAM(model=model, target_layers=target_layers)
+
+    # You can also use it within a with statement, to make sure it is freed,
+    # In case you need to re-create it inside an outer loop:
+    # with GradCAM(model=model, target_layers=target_layers) as cam:
+    #   ...
+
+    # We have to specify the target we want to generate
+    # the Class Activation Maps for.
+    # If targets is None, the highest scoring category
+    # will be used for every image in the batch.
+    # Here we use ClassifierOutputTarget, but you can define your own custom targets
+    # That are, for example, combinations of categories, or specific outputs in a non standard model.
+    misclassified_target = []
+    for prediction in misclassified_predictions:
+        targets = ClassifierOutputTarget(classes.index(prediction))
+        misclassified_target.append(targets)
+        
+    # You can also pass aug_smooth=True and eigen_smooth=True, to apply smoothing.
+    grayscale_cam = cam(input_tensor=input_tensor, targets=misclassified_target)
+    #print(grayscale_cam.shape)
+
+    # In this example grayscale_cam has only one image in the batch:
+    # grayscale_cam = grayscale_cam[0, :]
+    # print(grayscale_cam.shape)
+    # visualization = show_cam_on_image(np.array(misclassified_images), grayscale_cam, use_rgb=True)
+
+    # You can also get the model outputs without having to re-inference
+    model_outputs = cam.outputs
+
+
+    fig = plt.figure(figsize=(20,8))
+    for i in range(10):
+        plt.subplot(2, 5, i + 1)
+        #plt.tight_layout()
+        img = np.transpose(misclassified_images[i], (1,2,0))
+        class_name = misclassified_predictions[i]
+        grayscale_i = grayscale_cam[i, :]
+        visualization = show_cam_on_image(np.array(img), grayscale_i, use_rgb=True)
+        plt.imshow(visualization)
+        plt.title(f'Actual: {misclassified_labels[i]} Predection: {class_name}')
+        plt.xticks([])
+        plt.yticks([])
+
+        
 
 
 
