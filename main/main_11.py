@@ -72,7 +72,7 @@ for epoch in range(EPOCHS):
     print("EPOCH:", epoch)
     train_acc, train_losses = train.train(model, device, train_loader, optimizer, epoch, scheduler, criterion)
     test_acc, test_losses = train.test(model, device, test_loader, criterion)
-    print(scheduler.get_last_lr())
+    print("LR for current epoch: ",scheduler.get_last_lr())
 
     train.plot_loss_accuracy(train_losses,train_acc,test_losses,test_acc)
 
