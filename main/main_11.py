@@ -6,7 +6,7 @@ from torchvision import datasets, transforms
 #import model
 import matplotlib.pyplot as plt
 import numpy as np
-%cd ERA-V2-Support
+#%cd ERA-V2-Support
 from Model.model_11 import ResNet18
 import dataset
 import train
