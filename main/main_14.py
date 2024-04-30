@@ -49,7 +49,7 @@ model = ResNet18().to(device)
 utils.model_summary(model)
 
 criterion = nn.CrossEntropyLoss()
-max_lr, optimizer = utils.get_max_lr(model, train_loader,criterion)
+max_lr, optimizer = utils.get_max_lr(model, train_loader,criterion,device)
 
 from torch.optim.lr_scheduler import OneCycleLR
 
