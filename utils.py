@@ -39,10 +39,10 @@ def get_device():
 def model_summary(model):
     summary(model, input_size=(3, 32, 32))
 
-def get_max_lr(model,train_loader,criterion):
+def get_max_lr(model,train_loader,criterion,device):
     criterion = criterion
     optimizer = optim.Adam(model.parameters(), lr=1e-7, weight_decay=1e-2)
-    lr_finder = LRFinder(model, optimizer, criterion, device="cuda")
+    lr_finder = LRFinder(model, optimizer, criterion, device=device)
     lr_finder.range_test(train_loader, end_lr=100, num_iter=100)
     xs, max_lr = lr_finder.plot() # to inspect the loss-learning rate graph
     lr_finder.reset() # to reset the model and optimizer to their initial state
