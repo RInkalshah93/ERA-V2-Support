@@ -53,7 +53,7 @@ max_lr, optimizer = utils.get_max_lr(model, train_loader,criterion,device)
 
 from torch.optim.lr_scheduler import OneCycleLR
 
-EPOCHS = 1
+EPOCHS = 2
 
 print("Suggested Max LR: ",max_lr)
 scheduler = OneCycleLR(
